@@ -2,6 +2,7 @@ package com.main;
 import java.util.*;
 
 import com.operations.InventoryOps;
+import com.operations.Operator;
 import com.roominventory.*;
 
 
@@ -29,52 +30,64 @@ public class Main {
 		if(choice==1) {
 			System.out.println("\nPlease choose the Room type : Single | Double | Suite");
 			String ch = sc.nextLine();
-			
-			if(ch.equalsIgnoreCase("single")) {
-				int roomCount = roomData.get(RoomType.SINGLE).getCount();
-				System.out.print("The current room count is : "+roomCount+"\n How many rooms do you want to add : ");
-				int count = sc.nextInt(); sc.nextLine();
-				InventoryOps.updateRoomCount(RoomType.SINGLE, choice);
-			}else if(ch.equalsIgnoreCase("double")) {
-				int roomCount = roomData.get(RoomType.DOUBLE).getCount();
-				System.out.print("The current room count is : "+roomCount+"\n How many rooms do you want to add : ");
-				int count = sc.nextInt(); sc.nextLine();
-				InventoryOps.updateRoomCount(RoomType.DOUBLE, choice);
-			}else if(ch.equalsIgnoreCase("suite")) {
-				int roomCount = roomData.get(RoomType.SUITE).getCount();
-				System.out.print("The current room count is : "+roomCount+"\n How many rooms do you want to add : ");
-				int count = sc.nextInt(); sc.nextLine();
-				InventoryOps.updateRoomCount(RoomType.SUITE, choice);
-			}else {
-				System.out.println("Invalid Room Type selection !!");
-				return;
+			try {
+			    RoomType type = RoomType.valueOf(ch.toUpperCase()); // convert input to enum
+			    int roomCount = roomData.get(type).getCount();
+			    System.out.print("The current room count is : " + roomCount + 
+			                     "\n How many rooms do you want to add : ");
+			    int count = sc.nextInt(); sc.nextLine();
+			    InventoryOps.updateRoomCount(type, count);
+			} catch (IllegalArgumentException e) {
+			    System.out.println("Invalid Room Type selection !!");
 			}
+
 		}
 		else if(choice==2) {
 			System.out.println("\nPlease choose the Room type to update price: Single | Double | Suite");
 			String ch = sc.nextLine();
-			if(ch.equalsIgnoreCase("single")) {
-				double roomPrice  = roomData.get(RoomType.SINGLE).getPrice();
-				System.out.print("The current room Price is : "+roomPrice+"\n  Enter the Updated price");
-				double price = sc.nextDouble(); sc.nextLine();
-				InventoryOps.updateRoomPrice(RoomType.SINGLE, price);
-			}else if(ch.equalsIgnoreCase("double")) {
-				double roomPrice  = roomData.get(RoomType.DOUBLE).getPrice();
-				System.out.print("The current room Price is : "+roomPrice+"\n  Enter the Updated price");
-				double price = sc.nextDouble(); sc.nextLine();
-				InventoryOps.updateRoomPrice(RoomType.DOUBLE, price);
-			}else if(ch.equalsIgnoreCase("suite")) {
-				double roomPrice  = roomData.get(RoomType.SUITE).getPrice();
-				System.out.print("The current room Price is : "+roomPrice+"\n  Enter the Updated price");
-				double price = sc.nextDouble(); sc.nextLine();
-				InventoryOps.updateRoomPrice(RoomType.SUITE, price);
-			}else {
-				System.out.println("Invalid Room Type selection !!");
-				return;
-			}	
+			String input = ch.toUpperCase();
+			try {
+			    RoomType type = RoomType.valueOf(input); // Convert user input to enum
+			    double roomPrice = roomData.get(type).getPrice();
+			    System.out.print("The current room Price is : " + roomPrice + "\n  Enter the Updated price: ");
+			    double price = sc.nextDouble(); sc.nextLine();
+			    InventoryOps.updateRoomPrice(type, price);
+			} catch (IllegalArgumentException e) {
+			    System.out.println("Invalid Room Type selection !!");
+			}
+	
 		}
 		
 		
+		System.out.println("-----------------------------------------");
+		System.out.println("\n Room Booking :");
+		System.out.println("\n 1. Check Rooms availability \n 2. Check room prices \n 3. Book Rooms(CheckIn) \n 4. Checkout \n : ");
+		int ch02 = sc.nextInt();sc.nextLine();
 		
+		switch(ch02){
+		case 1:{
+			Operator.showAvailableRooms();
+			break;
+		}
+		case 2:{
+			Operator.checkRoomPrices();
+			break;
+		}
+		
+		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
