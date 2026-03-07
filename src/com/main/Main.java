@@ -9,6 +9,8 @@ import com.roominventory.*;
 public class Main {
 	
 	public static HashMap<RoomType,Room> roomData = new HashMap<>();
+	public static HashMap<RoomType,Room> bookedRooms = new HashMap<>();
+	
 	static {
 		roomData.put(RoomType.SINGLE, new Room(10,1000.0));
 		roomData.put(RoomType.DOUBLE, new Room(5,2500.0));
@@ -57,24 +59,54 @@ public class Main {
 			}
 	
 		}
+		boolean end = false;
+		do {
+			System.out.println("-----------------------------------------");
+			System.out.println("\n Room Booking :");
+			System.out.println("\n 1. Check Rooms availability \n 2. Check room prices \n 3. Book Rooms(CheckIn) \n 4. Checkout \n 5. Exit \n : ");
+			int ch02 = sc.nextInt();sc.nextLine();
+			
+			switch(ch02){
+			case 1:{
+				Operator.showAvailableRooms();
+				break;
+			}
+			case 2:{
+				Operator.checkRoomPrices();
+				break;
+			}
+			case 3:{
+				// should add an IllegalArgumentException Handler
+				System.out.print("\n Select the type of room you want to book : (single, double, suite) : ");
+				String input = sc.nextLine().toUpperCase();
+				RoomType roomtype = RoomType.valueOf(input);
+				System.out.print("No of rooms you want : ");
+				int count = sc.nextInt();
+				System.out.println("\n------------------");
+				boolean success = Operator.bookRooms(roomtype, count);
+				if(!success) {
+					System.out.println(" Requested No of rooms are not available ");
+				}
+				break;
+			}
+			case 4:{
+				System.out.print("\n Select the type of room you are Checking out from : (single, double, suite) : ");
+				String input = sc.nextLine().trim().toUpperCase();
+				RoomType roomtype = RoomType.valueOf(input);
+				boolean success = Operator.freeARoom(roomtype);
+				if(!success) {
+					System.out.println(" No room of type: "+roomtype+" has been booked!!");
+				}
+				break;
+			}
+			default:{
+				end = true;
+				break;
+			}
+			
+			}
+		}while(end==false);
 		
-		
-		System.out.println("-----------------------------------------");
-		System.out.println("\n Room Booking :");
-		System.out.println("\n 1. Check Rooms availability \n 2. Check room prices \n 3. Book Rooms(CheckIn) \n 4. Checkout \n : ");
-		int ch02 = sc.nextInt();sc.nextLine();
-		
-		switch(ch02){
-		case 1:{
-			Operator.showAvailableRooms();
-			break;
-		}
-		case 2:{
-			Operator.checkRoomPrices();
-			break;
-		}
-		
-		}
 	}
 }
 
