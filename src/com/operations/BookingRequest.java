@@ -18,5 +18,4 @@ public class BookingRequest {
 		return roomCount;
 	}
 	
-	
 }

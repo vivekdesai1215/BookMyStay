@@ -48,9 +48,7 @@ public class Room {
     }
  
     public int getAvailableCount() {
- 
         int count = 0;
- 
         for (IndividualRoom r : rooms) {
             if (!r.isBooked())
                 count++;
@@ -60,27 +58,20 @@ public class Room {
     }
  
     public IndividualRoom allocateRoom() {
- 
         for (IndividualRoom r : rooms) {
- 
             if (!r.isBooked()) {
                 r.setBooked(true);
                 return r;
             }
- 
         }
  
         return null;
     }
  
 	public void addRooms(RoomType type, int count) {
- 
     int start = rooms.size() + 1;
- 
     for(int i = start; i < start + count; i++){
- 
         String id = generateRoomId(type, i);
- 
         rooms.add(new IndividualRoom(id, type));
     }
 }
