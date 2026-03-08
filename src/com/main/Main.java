@@ -5,6 +5,8 @@ import java.util.*;
 import com.operations.InventoryOps;
 import com.operations.Operator;
 import com.operations.ReservationManager;
+import com.operations.Review;
+import com.operations.ReviewManager;
 import com.operations.Service;
 import com.operations.ServiceManager;
 import com.roominventory.*;
@@ -86,8 +88,9 @@ public class Main {
             System.out.println("3 Book Room");
             System.out.println("4 Checkout");
             System.out.println("5 Add Services");
-            System.out.println("6 Exit");
-            System.out.println("7 Bakc to Inventory Management");
+            System.out.println("6 Show all Reservations ");
+            System.out.println("7 Back to Inventory Management");
+            System.out.println("8 Exit");
             System.out.print(": ");
  
             int ch02 = sc.nextInt();
@@ -115,14 +118,21 @@ public class Main {
                     break;
  
                 case 4:
-                    System.out.print("\nEnter Room ID for checkout: ");
-                    String roomId = sc.nextLine();
+                    System.out.print("\nEnter Reservation Id for checkout: ");
+                    String reservationId = sc.nextLine();
  
-                    boolean checkout = Operator.freeARoom(roomId);
- 
-                    if (!checkout)
-                        System.out.println("Invalid Room ID or room not booked.");
- 
+                    if(!ReservationManager.reservationExists(reservationId)) {
+                    	System.out.println("Invalid Reservation Id");
+                    	break;
+                    }
+                    Operator.checkout(reservationId);
+                    System.out.print("Please rate your stay (1-5) : ");
+                    int rating = sc.nextInt(); sc.nextLine();
+                    
+                    System.out.print("Any reviews you wanna give ? : ");
+                    String message = sc.nextLine(); 
+                    Review review = new Review(rating,message);
+                    ReviewManager.addReview(reservationId, review);
                     break;
                 
                 case 5:{
@@ -150,6 +160,10 @@ public class Main {
                 	}
                 	
                 	ServiceManager.addService(resId, service);
+                	break;
+                }
+                case 6:{
+                	ReservationManager.showAllReservations();
                 	break;
                 }
                 case 7 :{

@@ -37,6 +37,8 @@ public class Operator {
     	}
     	
     	Room room = Main.roomData.get(booking.getRoomType());
+    	double roomPrice = room.getPrice();
+    	double totalRoomCost = roomPrice * booking.getRoomCount();
     	if(room.getAvailableCount()<booking.getRoomCount()) {
     		return null;
     	}
@@ -48,7 +50,7 @@ public class Operator {
     	}
     	
     	String reservationId = "RES"+System.currentTimeMillis();
-    	Reservation reservation = new Reservation(reservationId,allocatedRooms);
+    	Reservation reservation = new Reservation(reservationId,allocatedRooms,totalRoomCost);
     	
     	ReservationManager.addReservation(reservation);
     	System.out.println("\n Booking Confirmed !");
@@ -74,6 +76,15 @@ public class Operator {
             }
         }
         return false;
+    }
+    
+    public static void checkout(String reservationId) {
+    	Reservation r = ReservationManager.getReservation(reservationId);
+    	for(String roomId : r.getRoomIds()) {
+    		freeARoom(roomId);
+    	}
+    	r.setCheckOut(true);
+    	System.out.println("Checkout successful for Reservation : "+reservationId);
     }
 }
  
